@@ -38,6 +38,12 @@ async def execute_action(action: dict):
                 is_recurring=action.get("is_recurring", False),
                 recur_rule=action.get("recur_rule")
             )
+            # הוסף קישור Google Calendar לתשובה
+            cal_text = action["text"].replace(" ", "+")
+            cal_start = remind_at.strftime("%Y%m%dT%H%M%S")
+            cal_end = remind_at.strftime("%Y%m%dT%H%M%S")
+            cal_link = f"https://calendar.google.com/calendar/render?action=TEMPLATE&text={cal_text}&dates={cal_start}/{cal_end}"
+            result["reply"] = result.get("reply", "") + f"\n\n📅 הוסף ליומן: {cal_link}"
 
         elif action_type == "add_task":
             monday_id = await create_monday_task(action["text"], action.get("priority", "normal"))
