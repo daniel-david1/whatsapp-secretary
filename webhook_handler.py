@@ -19,8 +19,13 @@ async def handle_incoming_message(body: dict):
     logger.info(f"Message from {phone}: {text[:80]}")
     await save_message("user", text)
     result = await process_message(text)
+    cal_links = []
     for action in result.get("actions", []):
-        await execute_action(action)
+        cal_link = await execute_action(action)
+        if cal_link:
+            cal_links.append(cal_link)
+    if cal_links:
+        result["reply"] = result.get("reply", "") + "\n\n📅 הוסף ליומן: " + cal_links[0]
     reply = result.get("reply", "")
     if reply:
         await save_message("assistant", reply)
