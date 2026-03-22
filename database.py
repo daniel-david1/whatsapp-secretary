@@ -1,8 +1,8 @@
 import os
 import logging
 from datetime import datetime
-import asyncpg
-logger = logging.getLogger(__name__)
+import psycopg2
+from psycopg2.extras import RealDictCursorlogger = logging.getLogger(__name__)
 _pool = None
 
 async def get_pool():
