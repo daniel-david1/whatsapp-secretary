@@ -19,16 +19,13 @@ async def handle_incoming_message(body: dict):
     logger.info(f"Message from {phone}: {text[:80]}")
     await save_message("user", text)
     result = await process_message(text)
-
     cal_links = []
     for action in result.get("actions", []):
         cal_link = await execute_action(action)
         if cal_link:
             cal_links.append(cal_link)
-
     if cal_links:
         result["reply"] = result.get("reply", "") + "\n\n📅 הוסף ליומן: " + cal_links[0]
-
     reply = result.get("reply", "")
     if reply:
         await save_message("assistant", reply)
@@ -47,20 +44,18 @@ async def execute_action(action: dict):
                 recur_rule=action.get("recur_rule")
             )
             monday_id = await create_monday_task(
-                f"🔔 {action['text']} ({remind_at.strftime('%d/%m %H:%M')})",
+                f"תזכורת: {action['text']} ({remind_at.strftime('%d/%m %H:%M')})",
                 "normal"
             )
             await add_task(
-                text=f"🔔 {action['text']}",
+                text=f"תזכורת: {action['text']}",
                 priority="normal",
                 monday_item_id=monday_id
             )
             cal_text = action["text"].replace(" ", "+")
             cal_start = remind_at.strftime("%Y%m%dT%H%M%S")
-            cal_end = remind_at.strftime("%Y%m%dT%H%M%S")
-            cal_link = f"https://calendar.google.com/calendar/render?action=TEMPLATE&text={cal_text}&dates={cal_start}/{cal_end}"
+            cal_link = f"https://calendar.google.com/calendar/render?action=TEMPLATE&text={cal_text}&dates={cal_start}/{cal_start}"
             return cal_link
-
         elif action_type == "add_task":
             monday_id = await create_monday_task(action["text"], action.get("priority", "normal"))
             await add_task(
@@ -68,20 +63,15 @@ async def execute_action(action: dict):
                 priority=action.get("priority", "normal"),
                 monday_item_id=monday_id
             )
-
         elif action_type == "complete_task":
             task = await get_task(action["task_id"])
             if task and task.get("monday_item_id"):
                 await close_monday_task(task["monday_item_id"])
             await complete_task(action["task_id"])
-
         elif action_type == "delete_task":
             await delete_task(action["task_id"])
-
         elif action_type == "save_memory":
             await save_memory(action["category"], action["key"], action["value"])
-
     except Exception as e:
         logger.error(f"Error in action {action_type}: {e}", exc_info=True)
-
     return None
