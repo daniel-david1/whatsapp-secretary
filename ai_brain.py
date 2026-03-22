@@ -95,6 +95,7 @@ async def process_message(user_message: str) -> dict:
             messages=messages
         )
         raw = response.content[0].text.strip()
+        logger.info(f"Claude raw response: '{raw[:500]}'")
         if raw.startswith("```"):
             raw = raw.split("```")[1]
             if raw.startswith("json"):
