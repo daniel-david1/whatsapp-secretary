@@ -64,7 +64,7 @@ async def close_monday_task(item_id: str) -> bool:
     variables = {
         "item_id": item_id,
         "board_id": settings.MONDAY_BOARD_ID,
-        "column_values": "{\"color\": {\"label\": \"הושלם\"}}"
+        "column_values": "{\"color_mkyymrmf\": {\"label\": \"הושלם\"}}"
     }
 
     try:
