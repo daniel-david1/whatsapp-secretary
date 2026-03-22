@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 
 logger = logging.getLogger(__name__)
-DB_PATH = "/data/secretary.db"
+DB_PATH = "/tmp/secretary.db"
 
 def get_conn():
     os.makedirs("/data", exist_ok=True)
