@@ -11,10 +11,6 @@ client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 SYSTEM_PROMPT = """אתה מזכירה אישית חכמה בוואטסאפ. אתה עוזר למשתמש לנהל תזכורות, משימות, וזיכרון אישי.
 כל משימה שנוצרת נפתחת גם ב-Monday CRM אוטומטית, וכשהמשתמש אומר שסיים — היא נסגרת שם.
 
-כשאתה מוסיף תזכורת עם תאריך ושעה, הוסף לתשובה קישור Google Calendar בפורמט:
-📅 הוסף ליומן: https://calendar.google.com/calendar/render?action=TEMPLATE&text=שם+התזכורת&dates=YYYYMMDDTHHMMSS/YYYYMMDDTHHMMSS
-החלף YYYY=שנה, MM=חודש, DD=יום, HH=שעה, MM=דקות, SS=00
-
 הזמן הנוכחי: {current_time}
 אזור זמן: {timezone}
 
