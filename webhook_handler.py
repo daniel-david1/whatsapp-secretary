@@ -46,8 +46,14 @@ async def execute_action(action: dict):
                 is_recurring=action.get("is_recurring", False),
                 recur_rule=action.get("recur_rule")
             )
-            monday_id = await create_monday_task(f"🔔 {action['text']} ({remind_at.strftime('%d/%m %H:%M')})", "normal")
-            await add_task(text=f"🔔 {action['text']}", priority="normal", monday_item_id=monday_id)
+            monday_id = await create_monday_task(
+                f"🔔 {action['text']} ({remind_at.strftime('%d/%m %H:%M')})",
+                "normal"
+            )
+            await add_task(
+                text=f"🔔 {action['text']}",
+                priority="normal",
+                monday_item_id=monday_id
             )
             cal_text = action["text"].replace(" ", "+")
             cal_start = remind_at.strftime("%Y%m%dT%H%M%S")
